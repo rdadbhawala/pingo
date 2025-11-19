@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pingo - Image Bingo Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            display: flex;
+            gap: 20px;
+            max-width: 1600px;
+            margin: 0 auto;
+            height: calc(100vh - 40px);
+        }
+
+        /* Left Section Styles */
+        .left-section {
+            flex: 0 0 350px;
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+            max-height: calc(100vh - 40px);
+        }
+
+        .left-section h1 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 28px;
+            text-align: center;
+        }
+
+        .error-message {
+            background: #fee;
+            border: 1px solid #fcc;
+            border-radius: 6px;
+            padding: 12px;
+            margin-bottom: 15px;
+            color: #c00;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .input-group input[type="number"],
+        .input-group input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input[type="number"]:focus,
+        .input-group input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .grid-inputs {
+            display: flex;
+            gap: 10px;
+        }
+
+        .grid-inputs .input-group {
+            flex: 1;
+        }
+
+        .upload-area {
+            border: 2px dashed #667eea;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: #f8f9ff;
+        }
+
+        .upload-area:hover {
+            background: #f0f2ff;
+            border-color: #764ba2;
+        }
+
+        .upload-area input[type="file"] {
+            display: none;
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .upload-text {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .image-count {
+            margin-top: 10px;
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        button {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-generate {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-generate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-print {
+            background: #4caf50;
+            color: white;
+        }
+
+        .btn-print:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .instructions {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9ff;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .instructions h3 {
+            color: #667eea;
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+
+        .instructions ol {
+            margin-left: 20px;
+            color: #555;
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        .instructions li {
+            margin-bottom: 8px;
+        }
+
+        .instructions strong {
+            color: #333;
+        }
+
+        /* Right Section Styles */
+        .right-section {
+            flex: 1;
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+            max-height: calc(100vh - 40px);
+        }
+
+        .cards-container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .cards-container.multiple-cards {
+            gap: 40px;
+        }
+
+        .cards-container.multiple-cards .bingo-card {
+            /* margin-bottom: 20px; */
+            border: 3px solid #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #999;
+            text-align: center;
+        }
+
+        .empty-state-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+
+        .empty-state-text {
+            font-size: 18px;
+        }
+
+        /* Bingo Card Styles */
+        .bingo-card {
+            border: 3px solid #667eea;
+            border-radius: 12px;
+            padding: 20px;
+            background: white;
+            page-break-after: always;
+            page-break-inside: avoid;
+        }
+
+        .bingo-card-header {
+            text-align: center;
+            color: #667eea;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .bingo-grid {
+            display: grid;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .bingo-cell {
+            aspect-ratio: 1;
+            border: 2px solid #667eea;
+            border-radius: 6px;
+            overflow: hidden;
+            background: #f8f9ff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 4px;
+        }
+
+        .bingo-cell-image {
+            flex: 1;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .bingo-cell img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .bingo-cell-filename {
+            font-size: 10px;
+            color: #333;
+            text-align: center;
+            padding: 4px 2px 2px 2px;
+            word-break: break-word;
+            line-height: 1.2;
+            max-height: 30px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .bingo-card-footer {
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+            padding-top: 10px;
+            border-top: 2px solid #e0e0e0;
+        }
+
+        /* Print Styles */
+        @media print {
+            @page {
+                size: A4;
+                margin: 10mm;
+            }
+
+            body {
+                background: white;
+                padding: 0;
+                margin: 0;
+            }
+
+            .container {
+                display: block;
+                height: auto;
+            }
+
+            .left-section {
+                display: none;
+            }
+
+            .right-section {
+                box-shadow: none;
+                padding: 0;
+                max-height: none;
+                overflow: visible;
+            }
+
+            .cards-container {
+                gap: 0;
+            }
+
+            .bingo-card {
+                page-break-after: always;
+                page-break-inside: avoid;
+                margin: 0;
+                padding: 10mm;
+                height: calc(297mm - 20mm); /* A4 height minus margins */
+                max-height: calc(297mm - 20mm);
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                border: 2px solid #667eea;
+                box-sizing: border-box;
+            }
+
+            .bingo-card:last-child {
+                page-break-after: auto;
+            }
+
+            .bingo-card-header {
+                font-size: 20px;
+                margin-bottom: 8px;
+                padding-bottom: 8px;
+                flex-shrink: 0;
+            }
+
+            .bingo-grid {
+                flex: 1;
+                display: grid;
+                gap: 4px;
+                max-height: calc(100% - 80px); /* Leave space for header and footer */
+            }
+
+            .bingo-cell {
+                border: 1px solid #667eea;
+            }
+
+            .bingo-cell-filename {
+                font-size: 7px;
+                padding: 2px;
+            }
+
+            .bingo-card-footer {
+                font-size: 10px;
+                margin-top: 8px;
+                padding-top: 8px;
+                flex-shrink: 0;
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 968px) {
+            .container {
+                flex-direction: column;
+                height: auto;
+            }
+
+            .left-section {
+                flex: 1;
+                max-height: none;
+            }
+
+            .right-section {
+                min-height: 500px;
+                max-height: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Left Section: User Inputs -->
+        <div class="left-section">
+            <h1>⌗ Pingo</h1>
+            
+            <div class="error-message" id="errorMessage"></div>
+
+            <div class="input-group">
+                <label for="cardCount">Number of Bingo Cards (1-100)</label>
+                <input type="number" id="cardCount" min="1" max="100" value="1">
+            </div>
+
+            <div class="grid-inputs">
+                <div class="input-group">
+                    <label for="gridRows">Rows</label>
+                    <input type="number" id="gridRows" min="2" max="10" value="5">
+                </div>
+                <div class="input-group">
+                    <label for="gridCols">Columns</label>
+                    <input type="number" id="gridCols" min="2" max="10" value="5">
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="cardTitle">Card Title</label>
+                <input type="text" id="cardTitle" placeholder="Enter card title" value="BINGO">
+            </div>
+
+            <div class="input-group">
+                <label for="cardFooter">Card Footer</label>
+                <input type="text" id="cardFooter" placeholder="Enter footer text" value="">
+            </div>
+
+            <div class="input-group">
+                <label>Upload Images</label>
+                <div class="upload-area" id="uploadArea">
+                    <input type="file" id="imageUpload" accept="image/*" multiple>
+                    <div class="upload-icon">📁</div>
+                    <div class="upload-text">Click to upload images</div>
+                    <div class="image-count" id="imageCount">0 images uploaded</div>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button class="btn-generate" id="generateBtn">Generate</button>
+                <button class="btn-print" id="printBtn" disabled>Print</button>
+            </div>
+
+            <div class="instructions">
+                <h3>📋 How to Use</h3>
+                <ol>
+                    <li><strong>Upload Images:</strong> Click the upload area and select images from your computer. You can upload any number of images. The file name becomes the image title in the Bingo cards.</li>
+                    <li><strong>Configure Settings:</strong> Set the number of cards, grid size (rows/columns), title, and optional footer text.</li>
+                    <li><strong>Generate Cards:</strong> Click the "Generate" button to create your Bingo cards. They will appear on the right.</li>
+                    <li><strong>Print:</strong> Click the "Print" button to open the print dialog. Each card will print on a separate A4 page.</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Right Section: Bingo Cards Display -->
+        <div class="right-section">
+            <div class="cards-container" id="cardsContainer">
+                <div class="empty-state">
+                    <div class="empty-state-icon">🎲</div>
+                    <div class="empty-state-text">Upload images and click Generate to create Bingo cards</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global state
+        let uploadedImages = [];
+        let imageFilenames = []; // Store filenames corresponding to images
+        let generatedCards = false;
+
+        // DOM Elements
+        const imageUpload = document.getElementById('imageUpload');
+        const uploadArea = document.getElementById('uploadArea');
+        const imageCount = document.getElementById('imageCount');
+        const generateBtn = document.getElementById('generateBtn');
+        const printBtn = document.getElementById('printBtn');
+        const cardsContainer = document.getElementById('cardsContainer');
+        const errorMessage = document.getElementById('errorMessage');
+        const cardCount = document.getElementById('cardCount');
+        const gridRows = document.getElementById('gridRows');
+        const gridCols = document.getElementById('gridCols');
+        const cardTitle = document.getElementById('cardTitle');
+        const cardFooter = document.getElementById('cardFooter');
+
+        // Upload area click handler
+        uploadArea.addEventListener('click', () => {
+            imageUpload.click();
+        });
+
+        // Prevent default drag behaviors
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.style.background = '#e8ebff';
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.style.background = '#f8f9ff';
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.style.background = '#f8f9ff';
+            const files = e.dataTransfer.files;
+            handleImageUpload(files);
+        });
+
+        // Image upload handler
+        imageUpload.addEventListener('change', (e) => {
+            handleImageUpload(e.target.files);
+        });
+
+        /**
+         * Handle image upload and convert to base64 data URLs
+         * @param {FileList} files - The uploaded files
+         */
+        function handleImageUpload(files) {
+            const imageFiles = Array.from(files).filter(file => file.type.startsWith('image/'));
+            
+            if (imageFiles.length === 0) {
+                showError('Please upload valid image files.');
+                return;
+            }
+
+            // Clear previous images
+            uploadedImages = [];
+            imageFilenames = [];
+            let loadedCount = 0;
+
+            imageFiles.forEach((file) => {
+                const reader = new FileReader();
+                
+                reader.onload = (e) => {
+                    uploadedImages.push(e.target.result);
+                    // Extract filename without path and extension
+                    const filename = file.name.substring(0, file.name.lastIndexOf('.')) || file.name;
+                    imageFilenames.push(filename);
+                    loadedCount++;
+                    
+                    // Update count when all images are loaded
+                    if (loadedCount === imageFiles.length) {
+                        updateImageCount();
+                        hideError();
+                    }
+                };
+                
+                reader.onerror = () => {
+                    showError('Error reading one or more image files.');
+                };
+                
+                reader.readAsDataURL(file);
+            });
+        }
+
+        /**
+         * Update the image count display
+         */
+        function updateImageCount() {
+            imageCount.textContent = `${uploadedImages.length} image${uploadedImages.length !== 1 ? 's' : ''} uploaded`;
+            imageCount.style.color = uploadedImages.length >= 24 ? '#4caf50' : '#667eea';
+        }
+
+        /**
+         * Show error message
+         * @param {string} message - Error message to display
+         */
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.classList.add('show');
+        }
+
+        /**
+         * Hide error message
+         */
+        function hideError() {
+            errorMessage.classList.remove('show');
+        }
+
+        /**
+         * Validate user inputs
+         * @returns {boolean} - True if inputs are valid
+         */
+        function validateInputs() {
+            const numCards = parseInt(cardCount.value);
+            const rows = parseInt(gridRows.value);
+            const cols = parseInt(gridCols.value);
+
+            // Validate number of cards
+            if (isNaN(numCards) || numCards < 1 || numCards > 100) {
+                showError('Please enter a valid number of cards (1-100).');
+                return false;
+            }
+
+            // Validate grid dimensions
+            if (isNaN(rows) || rows < 2 || rows > 10 || isNaN(cols) || cols < 2 || cols > 10) {
+                showError('Please enter valid grid dimensions (2-10 for rows and columns).');
+                return false;
+            }
+
+            // Validate that at least one image is uploaded
+            if (uploadedImages.length < 1) {
+                showError('Please upload at least one image.');
+                return false;
+            }
+
+            return true;
+        }
+
+        /**
+         * Shuffle array using Fisher-Yates algorithm
+         * @param {Array} array - Array to shuffle
+         * @returns {Array} - Shuffled array copy
+         */
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        /**
+         * Generate a single bingo card
+         * @param {number} rows - Number of rows
+         * @param {number} cols - Number of columns
+         * @returns {Array} - Array of objects with image URLs and filenames for the card
+         */
+        function generateSingleCard(rows, cols) {
+            const cellsNeeded = rows * cols;
+            
+            // Create array of indices and shuffle
+            const indices = Array.from({ length: uploadedImages.length }, (_, i) => i);
+            const shuffledIndices = shuffleArray(indices);
+            
+            // Build card data with image and filename
+            const cardData = [];
+            for (let i = 0; i < cellsNeeded; i++) {
+                const index = shuffledIndices[i % shuffledIndices.length];
+                cardData.push({
+                    image: uploadedImages[index],
+                    filename: imageFilenames[index]
+                });
+            }
+            
+            return shuffleArray(cardData);
+        }
+
+        /**
+         * Create HTML for a bingo card
+         * @param {Array} cardData - Array of objects with image URLs and filenames
+         * @param {number} rows - Number of rows
+         * @param {number} cols - Number of columns
+         * @param {string} title - Card title
+         * @param {string} footer - Card footer
+         * @param {number} pageNumber - Page number of the card
+         * @param {number} totalPages - Total number of cards
+         * @returns {string} - HTML string for the card
+         */
+        function createBingoCardHTML(cardData, rows, cols, title, footer, pageNumber, totalPages) {
+            const gridStyle = `grid-template-columns: repeat(${cols}, 1fr); grid-template-rows: repeat(${rows}, 1fr);`;
+            
+            let cellsHTML = '';
+            cardData.forEach((cell) => {
+                cellsHTML += `
+                    <div class="bingo-cell">
+                        <div class="bingo-cell-image">
+                            <img src="${cell.image}" alt="${cell.filename}">
+                        </div>
+                        <div class="bingo-cell-filename">${cell.filename}</div>
+                    </div>
+                `;
+            });
+
+            // Build footer with page number
+            let footerHTML = '';
+            if (footer) {
+                footerHTML = `${footer} | Page ${pageNumber} of ${totalPages}`;
+            } else {
+                footerHTML = `Page ${pageNumber} of ${totalPages}`;
+            }
+
+            return `
+                <div class="bingo-card">
+                    <div class="bingo-card-header">${title || 'BINGO'}</div>
+                    <div class="bingo-grid" style="${gridStyle}">
+                        ${cellsHTML}
+                    </div>
+                    <div class="bingo-card-footer">${footerHTML}</div>
+                </div>
+            `;
+        }
+
+        /**
+         * Generate bingo cards
+         */
+        function generateBingoCards() {
+            // Validate inputs
+            if (!validateInputs()) {
+                return;
+            }
+
+            hideError();
+
+            const numCards = parseInt(cardCount.value);
+            const rows = parseInt(gridRows.value);
+            const cols = parseInt(gridCols.value);
+            const title = cardTitle.value.trim();
+            const footer = cardFooter.value.trim();
+
+            // Clear previous cards
+            cardsContainer.innerHTML = '';
+
+            // Add class for multiple cards styling
+            if (numCards > 1) {
+                cardsContainer.classList.add('multiple-cards');
+            } else {
+                cardsContainer.classList.remove('multiple-cards');
+            }
+
+            // Generate cards
+            for (let i = 0; i < numCards; i++) {
+                const cardData = generateSingleCard(rows, cols);
+                const cardHTML = createBingoCardHTML(cardData, rows, cols, title, footer, i + 1, numCards);
+                cardsContainer.innerHTML += cardHTML;
+            }
+
+            generatedCards = true;
+            printBtn.disabled = false;
+
+            // Scroll to top of cards container
+            cardsContainer.scrollTop = 0;
+        }
+
+        /**
+         * Print the generated bingo cards
+         */
+        function printBingoCards() {
+            if (!generatedCards) {
+                showError('Please generate cards before printing.');
+                return;
+            }
+
+            window.print();
+        }
+
+        // Event listeners
+        generateBtn.addEventListener('click', generateBingoCards);
+        printBtn.addEventListener('click', printBingoCards);
+
+        // Allow Enter key to generate cards
+        [cardCount, gridRows, gridCols, cardTitle, cardFooter].forEach(input => {
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    generateBingoCards();
+                }
+            });
+        });
+
+        // Initialize
+        updateImageCount();
+    </script>
+</body>
+</html>
