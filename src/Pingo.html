@@ -430,7 +430,7 @@
         <!-- Left Section: User Inputs -->
         <div class="left-section">
             <h1>⌗ Pingo</h1>
-            
+
             <div class="error-message" id="errorMessage"></div>
 
             <div class="input-group">
@@ -496,6 +496,17 @@
         </div>
     </div>
 
+    <!-- Google tag (gtag.js) START -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-7RBBBZQCVG"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-7RBBBZQCVG');
+    </script>
+    <!-- Google tag (gtag.js) END -->
+
     <script>
         // Global state
         let uploadedImages = [];
@@ -549,7 +560,7 @@
          */
         function handleImageUpload(files) {
             const imageFiles = Array.from(files).filter(file => file.type.startsWith('image/'));
-            
+
             if (imageFiles.length === 0) {
                 showError('Please upload valid image files.');
                 return;
@@ -562,25 +573,25 @@
 
             imageFiles.forEach((file) => {
                 const reader = new FileReader();
-                
+
                 reader.onload = (e) => {
                     uploadedImages.push(e.target.result);
                     // Extract filename without path and extension
                     const filename = file.name.substring(0, file.name.lastIndexOf('.')) || file.name;
                     imageFilenames.push(filename);
                     loadedCount++;
-                    
+
                     // Update count when all images are loaded
                     if (loadedCount === imageFiles.length) {
                         updateImageCount();
                         hideError();
                     }
                 };
-                
+
                 reader.onerror = () => {
                     showError('Error reading one or more image files.');
                 };
-                
+
                 reader.readAsDataURL(file);
             });
         }
@@ -661,11 +672,11 @@
          */
         function generateSingleCard(rows, cols) {
             const cellsNeeded = rows * cols;
-            
+
             // Create array of indices and shuffle
             const indices = Array.from({ length: uploadedImages.length }, (_, i) => i);
             const shuffledIndices = shuffleArray(indices);
-            
+
             // Build card data with image and filename
             const cardData = [];
             for (let i = 0; i < cellsNeeded; i++) {
@@ -675,7 +686,7 @@
                     filename: imageFilenames[index]
                 });
             }
-            
+
             return shuffleArray(cardData);
         }
 
@@ -692,17 +703,17 @@
          */
         function createBingoCardHTML(cardData, rows, cols, title, footer, pageNumber, totalPages) {
             const gridStyle = `grid-template-columns: repeat(${cols}, 1fr); grid-template-rows: repeat(${rows}, 1fr);`;
-            
+
             let cellsHTML = '';
             cardData.forEach((cell) => {
                 cellsHTML += `
-                    <div class="bingo-cell">
-                        <div class="bingo-cell-image">
-                            <img src="${cell.image}" alt="${cell.filename}">
-                        </div>
-                        <div class="bingo-cell-filename">${cell.filename}</div>
-                    </div>
-                `;
+                            <div class="bingo-cell">
+                                <div class="bingo-cell-image">
+                                    <img src="${cell.image}" alt="${cell.filename}">
+                                </div>
+                                <div class="bingo-cell-filename">${cell.filename}</div>
+                            </div>
+                        `;
             });
 
             // Build footer with page number
@@ -714,14 +725,14 @@
             }
 
             return `
-                <div class="bingo-card">
-                    <div class="bingo-card-header">${title || 'BINGO'}</div>
-                    <div class="bingo-grid" style="${gridStyle}">
-                        ${cellsHTML}
-                    </div>
-                    <div class="bingo-card-footer">${footerHTML}</div>
-                </div>
-            `;
+                        <div class="bingo-card">
+                            <div class="bingo-card-header">${title || 'BINGO'}</div>
+                            <div class="bingo-grid" style="${gridStyle}">
+                                ${cellsHTML}
+                            </div>
+                            <div class="bingo-card-footer">${footerHTML}</div>
+                        </div>
+                    `;
         }
 
         /**
