@@ -566,6 +566,12 @@
                 return;
             }
 
+			gtag('event', 'files_uploaded', {
+				'event_category': 'pingo',
+				'event_label': 'image_upload',
+				'value': imageFiles.length // Number of files uploaded
+			});
+
             // Clear previous images
             uploadedImages = [];
             imageFilenames = [];
@@ -739,6 +745,13 @@
          * Generate bingo cards
          */
         function generateBingoCards() {
+
+			gtag('event', 'generate_bingo', {
+				'event_category': 'pingo',
+				'event_label': 'generate_bingo',
+				'value': 1
+			});
+
             // Validate inputs
             if (!validateInputs()) {
                 return;
@@ -784,6 +797,12 @@
                 showError('Please generate cards before printing.');
                 return;
             }
+
+            gtag('event', 'print_bingo', {
+                'event_category': 'pingo',
+                'event_label': 'print_bingo',
+                'value': 1
+            });
 
             window.print();
         }
