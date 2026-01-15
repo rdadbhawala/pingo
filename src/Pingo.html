@@ -37,12 +37,12 @@
             max-height: calc(100vh - 40px);
         }
 
-        .left-section h1 {
-            color: #667eea;
-            margin-bottom: 20px;
-            font-size: 28px;
-            text-align: center;
-        }
+            .left-section h1 {
+                color: #667eea;
+                margin-bottom: 20px;
+                font-size: 28px;
+                text-align: center;
+            }
 
         .error-message {
             background: #fee;
@@ -54,46 +54,46 @@
             display: none;
         }
 
-        .error-message.show {
-            display: block;
-        }
+            .error-message.show {
+                display: block;
+            }
 
         .input-group {
             margin-bottom: 20px;
         }
 
-        .input-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #333;
-            font-weight: 600;
-            font-size: 14px;
-        }
+            .input-group label {
+                display: block;
+                margin-bottom: 8px;
+                color: #333;
+                font-weight: 600;
+                font-size: 14px;
+            }
 
-        .input-group input[type="number"],
-        .input-group input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            border: 2px solid #e0e0e0;
-            border-radius: 6px;
-            font-size: 14px;
-            transition: border-color 0.3s;
-        }
+            .input-group input[type="number"],
+            .input-group input[type="text"] {
+                width: 100%;
+                padding: 10px;
+                border: 2px solid #e0e0e0;
+                border-radius: 6px;
+                font-size: 14px;
+                transition: border-color 0.3s;
+            }
 
-        .input-group input[type="number"]:focus,
-        .input-group input[type="text"]:focus {
-            outline: none;
-            border-color: #667eea;
-        }
+                .input-group input[type="number"]:focus,
+                .input-group input[type="text"]:focus {
+                    outline: none;
+                    border-color: #667eea;
+                }
 
         .grid-inputs {
             display: flex;
             gap: 10px;
         }
 
-        .grid-inputs .input-group {
-            flex: 1;
-        }
+            .grid-inputs .input-group {
+                flex: 1;
+            }
 
         .upload-area {
             border: 2px dashed #667eea;
@@ -105,14 +105,14 @@
             background: #f8f9ff;
         }
 
-        .upload-area:hover {
-            background: #f0f2ff;
-            border-color: #764ba2;
-        }
+            .upload-area:hover {
+                background: #f0f2ff;
+                border-color: #764ba2;
+            }
 
-        .upload-area input[type="file"] {
-            display: none;
-        }
+            .upload-area input[type="file"] {
+                display: none;
+            }
 
         .upload-icon {
             font-size: 48px;
@@ -153,21 +153,21 @@
             color: white;
         }
 
-        .btn-generate:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-        }
+            .btn-generate:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+            }
 
         .btn-print {
             background: #4caf50;
             color: white;
         }
 
-        .btn-print:hover {
-            background: #45a049;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
-        }
+            .btn-print:hover {
+                background: #45a049;
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+            }
 
         button:disabled {
             opacity: 0.5;
@@ -183,26 +183,26 @@
             border: 1px solid #e0e0e0;
         }
 
-        .instructions h3 {
-            color: #667eea;
-            font-size: 16px;
-            margin-bottom: 12px;
-        }
+            .instructions h3 {
+                color: #667eea;
+                font-size: 16px;
+                margin-bottom: 12px;
+            }
 
-        .instructions ol {
-            margin-left: 20px;
-            color: #555;
-            font-size: 13px;
-            line-height: 1.8;
-        }
+            .instructions ol {
+                margin-left: 20px;
+                color: #555;
+                font-size: 13px;
+                line-height: 1.8;
+            }
 
-        .instructions li {
-            margin-bottom: 8px;
-        }
+            .instructions li {
+                margin-bottom: 8px;
+            }
 
-        .instructions strong {
-            color: #333;
-        }
+            .instructions strong {
+                color: #333;
+            }
 
         /* Right Section Styles */
         .right-section {
@@ -221,15 +221,15 @@
             gap: 30px;
         }
 
-        .cards-container.multiple-cards {
-            gap: 40px;
-        }
+            .cards-container.multiple-cards {
+                gap: 40px;
+            }
 
-        .cards-container.multiple-cards .bingo-card {
-            /* margin-bottom: 20px; */
-            border: 3px solid #667eea;
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
-        }
+                .cards-container.multiple-cards .bingo-card {
+                    /* margin-bottom: 20px; */
+                    border: 3px solid #667eea;
+                    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+                }
 
         .empty-state {
             display: flex;
@@ -371,9 +371,9 @@
                 box-sizing: border-box;
             }
 
-            .bingo-card:last-child {
-                page-break-after: auto;
-            }
+                .bingo-card:last-child {
+                    page-break-after: auto;
+                }
 
             .bingo-card-header {
                 font-size: 20px;
@@ -476,6 +476,13 @@
                 </div>
             </div>
 
+            <div class="input-group">
+                <label for="useFilenameLabels" style="display: flex; align-items: center; margin-bottom: 8px;">
+                    <input type="checkbox" id="useFilenameLabels" checked style="width: auto; margin-right: 8px; cursor: pointer;">
+                    Use filename as Image Labels
+                </label>
+            </div>
+
             <div class="button-group">
                 <button class="btn-generate" id="generateBtn">Generate</button>
                 <button class="btn-print" id="printBtn" disabled>Print</button>
@@ -484,7 +491,7 @@
             <div class="instructions">
                 <h3>📋 How to Use</h3>
                 <ol>
-                    <li><strong>Upload Images:</strong> Click the upload area and select images from your computer. You can upload any number of images. The file name becomes the image title in the Bingo cards.</li>
+                    <li><strong>Upload Images:</strong> Click the upload area and select images from your computer. You can upload any number of images. The file name becomes the image title in the Bingo cards if "Use filename as Image Labels" is checked.</li>
                     <li><strong>Configure Settings:</strong> Set the number of cards, grid size (rows/columns), title, and optional footer text.</li>
                     <li><strong>Generate Cards:</strong> Click the "Generate" button to create your Bingo cards. They will appear on the right.</li>
                     <li><strong>Print:</strong> Click the "Print" button to open the print dialog. Each card will print on a separate A4 page.</li>
@@ -534,6 +541,7 @@
         const cardTitle = document.getElementById('cardTitle');
         const cardFooter = document.getElementById('cardFooter');
         const displayPageNumbers = document.getElementById('displayPageNumbers');
+        const useFilenameLabels = document.getElementById('useFilenameLabels');
 
         // Upload area click handler
         uploadArea.addEventListener('click', () => {
@@ -574,15 +582,15 @@
                 return;
             }
 
-			try {
-				gtag('event', 'files_uploaded', {
-					'event_category': 'pingo',
-					'event_label': 'image_upload',
-					'value': imageFiles.length // Number of files uploaded
-				});
-			} catch (e) {
-				// Google Analytics event failed, continue with application logic
-			}
+            try {
+                gtag('event', 'files_uploaded', {
+                    'event_category': 'pingo',
+                    'event_label': 'image_upload',
+                    'value': imageFiles.length // Number of files uploaded
+                });
+            } catch (e) {
+                // Google Analytics event failed, continue with application logic
+            }
 
             // Clear previous images
             uploadedImages = [];
@@ -718,21 +726,25 @@
          * @param {number} pageNumber - Page number of the card
          * @param {number} totalPages - Total number of cards
          * @param {boolean} includePageNumbers - Whether to include page numbers in footer
+         * @param {boolean} includeImageLabels - Whether to show per-image filename labels
          * @returns {string} - HTML string for the card
          */
-        function createBingoCardHTML(cardData, rows, cols, title, footer, pageNumber, totalPages, includePageNumbers) {
+        function createBingoCardHTML(cardData, rows, cols, title, footer, pageNumber, totalPages, includePageNumbers, includeImageLabels) {
             const gridStyle = `grid-template-columns: repeat(${cols}, 1fr); grid-template-rows: repeat(${rows}, 1fr);`;
 
             let cellsHTML = '';
             cardData.forEach((cell) => {
+                // Set img alt to filename only when labels are used for accessibility
+                const imgAlt = includeImageLabels ? cell.filename : '';
+                const labelHTML = includeImageLabels ? `<div class="bingo-cell-filename">${cell.filename}</div>` : '';
                 cellsHTML += `
-                            <div class="bingo-cell">
-                                <div class="bingo-cell-image">
-                                    <img src="${cell.image}" alt="${cell.filename}">
+                                <div class="bingo-cell">
+                                    <div class="bingo-cell-image">
+                                        <img src="${cell.image}" alt="${imgAlt}">
+                                    </div>
+                                    ${labelHTML}
                                 </div>
-                                <div class="bingo-cell-filename">${cell.filename}</div>
-                            </div>
-                        `;
+                            `;
             });
 
             // Build footer with optional page number
@@ -748,14 +760,14 @@
             }
 
             return `
-                        <div class="bingo-card">
-                            <div class="bingo-card-header">${title || 'BINGO'}</div>
-                            <div class="bingo-grid" style="${gridStyle}">
-                                ${cellsHTML}
+                            <div class="bingo-card">
+                                <div class="bingo-card-header">${title || 'BINGO'}</div>
+                                <div class="bingo-grid" style="${gridStyle}">
+                                    ${cellsHTML}
+                                </div>
+                                <div class="bingo-card-footer">${footerHTML}</div>
                             </div>
-                            <div class="bingo-card-footer">${footerHTML}</div>
-                        </div>
-                    `;
+                        `;
         }
 
         /**
@@ -763,15 +775,15 @@
          */
         function generateBingoCards() {
 
-			try {
-				gtag('event', 'generate_bingo', {
-					'event_category': 'pingo',
-					'event_label': 'generate_bingo',
-					'value': 1
-				});
-			} catch (e) {
-				// Google Analytics event failed, continue with application logic
-			}
+            try {
+                gtag('event', 'generate_bingo', {
+                    'event_category': 'pingo',
+                    'event_label': 'generate_bingo',
+                    'value': 1
+                });
+            } catch (e) {
+                // Google Analytics event failed, continue with application logic
+            }
 
             // Validate inputs
             if (!validateInputs()) {
@@ -786,6 +798,7 @@
             const title = cardTitle.value.trim();
             const footer = cardFooter.value.trim();
             const includePageNumbers = displayPageNumbers.checked;
+            const includeImageLabels = useFilenameLabels.checked;
 
             // Clear previous cards
             cardsContainer.innerHTML = '';
@@ -800,7 +813,17 @@
             // Generate cards
             for (let i = 0; i < numCards; i++) {
                 const cardData = generateSingleCard(rows, cols);
-                const cardHTML = createBingoCardHTML(cardData, rows, cols, title, footer, i + 1, numCards, includePageNumbers);
+                const cardHTML = createBingoCardHTML(
+                    cardData,
+                    rows,
+                    cols,
+                    title,
+                    footer,
+                    i + 1,
+                    numCards,
+                    includePageNumbers,
+                    includeImageLabels
+                );
                 cardsContainer.innerHTML += cardHTML;
             }
 
