@@ -460,6 +460,13 @@
             </div>
 
             <div class="input-group">
+                <label for="displayPageNumbers" style="display: flex; align-items: center; margin-bottom: 8px;">
+                    <input type="checkbox" id="displayPageNumbers" checked style="width: auto; margin-right: 8px; cursor: pointer;">
+                    Display Page Numbers in Footer
+                </label>
+            </div>
+
+            <div class="input-group">
                 <label>Upload Images</label>
                 <div class="upload-area" id="uploadArea">
                     <input type="file" id="imageUpload" accept="image/*" multiple>
@@ -526,6 +533,7 @@
         const gridCols = document.getElementById('gridCols');
         const cardTitle = document.getElementById('cardTitle');
         const cardFooter = document.getElementById('cardFooter');
+        const displayPageNumbers = document.getElementById('displayPageNumbers');
 
         // Upload area click handler
         uploadArea.addEventListener('click', () => {
@@ -566,11 +574,15 @@
                 return;
             }
 
-			gtag('event', 'files_uploaded', {
-				'event_category': 'pingo',
-				'event_label': 'image_upload',
-				'value': imageFiles.length // Number of files uploaded
-			});
+			try {
+				gtag('event', 'files_uploaded', {
+					'event_category': 'pingo',
+					'event_label': 'image_upload',
+					'value': imageFiles.length // Number of files uploaded
+				});
+			} catch (e) {
+				// Google Analytics event failed, continue with application logic
+			}
 
             // Clear previous images
             uploadedImages = [];
@@ -705,9 +717,10 @@
          * @param {string} footer - Card footer
          * @param {number} pageNumber - Page number of the card
          * @param {number} totalPages - Total number of cards
+         * @param {boolean} includePageNumbers - Whether to include page numbers in footer
          * @returns {string} - HTML string for the card
          */
-        function createBingoCardHTML(cardData, rows, cols, title, footer, pageNumber, totalPages) {
+        function createBingoCardHTML(cardData, rows, cols, title, footer, pageNumber, totalPages, includePageNumbers) {
             const gridStyle = `grid-template-columns: repeat(${cols}, 1fr); grid-template-rows: repeat(${rows}, 1fr);`;
 
             let cellsHTML = '';
@@ -722,12 +735,16 @@
                         `;
             });
 
-            // Build footer with page number
+            // Build footer with optional page number
             let footerHTML = '';
-            if (footer) {
-                footerHTML = `${footer} | Page ${pageNumber} of ${totalPages}`;
+            if (includePageNumbers) {
+                if (footer) {
+                    footerHTML = `${footer} | Page ${pageNumber} of ${totalPages}`;
+                } else {
+                    footerHTML = `Page ${pageNumber} of ${totalPages}`;
+                }
             } else {
-                footerHTML = `Page ${pageNumber} of ${totalPages}`;
+                footerHTML = footer;
             }
 
             return `
@@ -746,11 +763,15 @@
          */
         function generateBingoCards() {
 
-			gtag('event', 'generate_bingo', {
-				'event_category': 'pingo',
-				'event_label': 'generate_bingo',
-				'value': 1
-			});
+			try {
+				gtag('event', 'generate_bingo', {
+					'event_category': 'pingo',
+					'event_label': 'generate_bingo',
+					'value': 1
+				});
+			} catch (e) {
+				// Google Analytics event failed, continue with application logic
+			}
 
             // Validate inputs
             if (!validateInputs()) {
@@ -764,6 +785,7 @@
             const cols = parseInt(gridCols.value);
             const title = cardTitle.value.trim();
             const footer = cardFooter.value.trim();
+            const includePageNumbers = displayPageNumbers.checked;
 
             // Clear previous cards
             cardsContainer.innerHTML = '';
@@ -778,7 +800,7 @@
             // Generate cards
             for (let i = 0; i < numCards; i++) {
                 const cardData = generateSingleCard(rows, cols);
-                const cardHTML = createBingoCardHTML(cardData, rows, cols, title, footer, i + 1, numCards);
+                const cardHTML = createBingoCardHTML(cardData, rows, cols, title, footer, i + 1, numCards, includePageNumbers);
                 cardsContainer.innerHTML += cardHTML;
             }
 
@@ -798,11 +820,15 @@
                 return;
             }
 
-            gtag('event', 'print_bingo', {
-                'event_category': 'pingo',
-                'event_label': 'print_bingo',
-                'value': 1
-            });
+            try {
+                gtag('event', 'print_bingo', {
+                    'event_category': 'pingo',
+                    'event_label': 'print_bingo',
+                    'value': 1
+                });
+            } catch (e) {
+                // Google Analytics event failed, continue with application logic
+            }
 
             window.print();
         }
