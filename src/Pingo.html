@@ -481,44 +481,53 @@
             <!-- Font selection controls (offline-safe using system/web-safe fonts) -->
             <div class="input-group">
                 <label for="titleFontSelect">Title Font</label>
-                <select id="titleFontSelect">
-                    <option value="'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">System Default (Segoe UI)</option>
-                    <option value="Arial, Helvetica, sans-serif">Arial</option>
-                    <option value="'Trebuchet MS', Helvetica, sans-serif">Trebuchet MS</option>
-                    <option value="'Times New Roman', Times, serif">'Times New Roman'</option>
-                    <option value="Georgia, serif">Georgia</option>
-                    <option value="'Courier New', Courier, monospace">'Courier New'</option>
-                    <option value="Impact, Charcoal, sans-serif">Impact</option>
-                    <option value="'Comic Sans MS', 'Comic Sans', cursive">'Comic Sans MS'</option>
-                    <option value="Verdana, Geneva, Tahoma, sans-serif">Verdana</option>
-                </select>
+                <div style="display: flex; gap: 10px;">
+                    <select id="titleFontSelect" style="flex: 1;">
+                        <option value="'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">System Default (Segoe UI)</option>
+                        <option value="Arial, Helvetica, sans-serif">Arial</option>
+                        <option value="'Trebuchet MS', Helvetica, sans-serif">Trebuchet MS</option>
+                        <option value="'Times New Roman', Times, serif">'Times New Roman'</option>
+                        <option value="Georgia, serif">Georgia</option>
+                        <option value="'Courier New', Courier, monospace">'Courier New'</option>
+                        <option value="Impact, Charcoal, sans-serif">Impact</option>
+                        <option value="'Comic Sans MS', 'Comic Sans', cursive">'Comic Sans MS'</option>
+                        <option value="Verdana, Geneva, Tahoma, sans-serif">Verdana</option>
+                    </select>
+                    <input type="number" id="titleFontSize" min="8" max="72" value="24" style="width: 70px;">
+                </div>
             </div>
 
             <div class="input-group">
                 <label for="footerFontSelect">Footer Font</label>
-                <select id="footerFontSelect">
-                    <option value="inherit">Inherit (default)</option>
-                    <option value="'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">Segoe UI</option>
-                    <option value="Arial, Helvetica, sans-serif">Arial</option>
-                    <option value="'Times New Roman', Times, serif">'Times New Roman'</option>
-                    <option value="Georgia, serif">Georgia</option>
-                    <option value="'Courier New', Courier, monospace">'Courier New'</option>
-                    <option value="Verdana, Geneva, Tahoma, sans-serif">Verdana</option>
-                </select>
+                <div style="display: flex; gap: 10px;">
+                    <select id="footerFontSelect" style="flex: 1;">
+                        <option value="inherit">Inherit (default)</option>
+                        <option value="'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">Segoe UI</option>
+                        <option value="Arial, Helvetica, sans-serif">Arial</option>
+                        <option value="'Times New Roman', Times, serif">'Times New Roman'</option>
+                        <option value="Georgia, serif">Georgia</option>
+                        <option value="'Courier New', Courier, monospace">'Courier New'</option>
+                        <option value="Verdana, Geneva, Tahoma, sans-serif">Verdana</option>
+                    </select>
+                    <input type="number" id="footerFontSize" min="8" max="72" value="14" style="width: 70px;">
+                </div>
             </div>
 
             <div class="input-group">
                 <label for="labelFontSelect">Image Label Font</label>
-                <select id="labelFontSelect">
-                    <option value="inherit">Inherit (default)</option>
-                    <option value="'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">Segoe UI</option>
-                    <option value="Arial, Helvetica, sans-serif">Arial</option>
-                    <option value="'Trebuchet MS', Helvetica, sans-serif">Trebuchet MS</option>
-                    <option value="'Times New Roman', Times, serif">'Times New Roman'</option>
-                    <option value="Georgia, serif">Georgia</option>
-                    <option value="'Courier New', Courier, monospace">'Courier New'</option>
-                    <option value="'Comic Sans MS', 'Comic Sans', cursive">'Comic Sans MS'</option>
-                </select>
+                <div style="display: flex; gap: 10px;">
+                    <select id="labelFontSelect" style="flex: 1;">
+                        <option value="inherit">Inherit (default)</option>
+                        <option value="'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">Segoe UI</option>
+                        <option value="Arial, Helvetica, sans-serif">Arial</option>
+                        <option value="'Trebuchet MS', Helvetica, sans-serif">Trebuchet MS</option>
+                        <option value="'Times New Roman', Times, serif">'Times New Roman'</option>
+                        <option value="Georgia, serif">Georgia</option>
+                        <option value="'Courier New', Courier, monospace">'Courier New'</option>
+                        <option value="'Comic Sans MS', 'Comic Sans', cursive">'Comic Sans MS'</option>
+                    </select>
+                    <input type="number" id="labelFontSize" min="8" max="72" value="11" style="width: 70px;">
+                </div>
             </div>
 
             <div class="input-group">
@@ -592,6 +601,9 @@
         const titleFontSelect = document.getElementById('titleFontSelect');
         const footerFontSelect = document.getElementById('footerFontSelect');
         const labelFontSelect = document.getElementById('labelFontSelect');
+        const titleFontSize = document.getElementById('titleFontSize');
+        const footerFontSize = document.getElementById('footerFontSize');
+        const labelFontSize = document.getElementById('labelFontSize');
 
         // Upload area click handler
         uploadArea.addEventListener('click', () => {
@@ -780,16 +792,19 @@
          * @param {string} titleFont - CSS font-family value for title
          * @param {string} footerFont - CSS font-family value for footer
          * @param {string} labelFont - CSS font-family value for image labels
+         * @param {number} titleSize - Font size in pixels for title
+         * @param {number} footerSize - Font size in pixels for footer
+         * @param {number} labelSize - Font size in pixels for image labels
          * @returns {string} - HTML string for the card
          */
-        function createBingoCardHTML(cardData, rows, cols, title, footer, pageNumber, totalPages, includePageNumbers, includeImageLabels, titleFont, footerFont, labelFont) {
+        function createBingoCardHTML(cardData, rows, cols, title, footer, pageNumber, totalPages, includePageNumbers, includeImageLabels, titleFont, footerFont, labelFont, titleSize, footerSize, labelSize) {
             const gridStyle = `grid-template-columns: repeat(${cols}, 1fr); grid-template-rows: repeat(${rows}, 1fr);`;
 
             let cellsHTML = '';
             cardData.forEach((cell) => {
                 // Set img alt to filename only when labels are used for accessibility
                 const imgAlt = includeImageLabels ? cell.filename : '';
-                const labelStyle = labelFont && labelFont !== 'inherit' ? `style="font-family: ${labelFont};"` : '';
+                const labelStyle = labelFont && labelFont !== 'inherit' ? `style="font-family: ${labelFont}; font-size: ${labelSize}px;"` : labelSize ? `style="font-size: ${labelSize}px;"` : '';
                 const labelHTML = includeImageLabels ? `<div class="bingo-cell-filename" ${labelStyle}>${cell.filename}</div>` : '';
                 cellsHTML += `
                                     <div class="bingo-cell">
@@ -813,8 +828,8 @@
                 footerHTML = footer;
             }
 
-            const headerStyle = titleFont && titleFont !== 'inherit' ? `style="font-family: ${titleFont};"` : '';
-            const footerStyle = footerFont && footerFont !== 'inherit' ? `style="font-family: ${footerFont};"` : '';
+            const headerStyle = titleFont && titleFont !== 'inherit' ? `style="font-family: ${titleFont}; font-size: ${titleSize}px;"` : `style="font-size: ${titleSize}px;"`;
+            const footerStyle = footerFont && footerFont !== 'inherit' ? `style="font-family: ${footerFont}; font-size: ${footerSize}px;"` : `style="font-size: ${footerSize}px;"`;
 
             return `
                                 <div class="bingo-card">
@@ -857,10 +872,13 @@
             const includePageNumbers = displayPageNumbers.checked;
             const includeImageLabels = useFilenameLabels.checked;
 
-            // Read selected fonts (values are CSS-ready font-family fallbacks)
+            // Read selected fonts and sizes (values are CSS-ready font-family fallbacks)
             const titleFont = titleFontSelect.value || 'inherit';
             const footerFont = footerFontSelect.value || 'inherit';
             const labelFont = labelFontSelect.value || 'inherit';
+            const titleSize = parseInt(titleFontSize.value) || 24;
+            const footerSize = parseInt(footerFontSize.value) || 14;
+            const labelSize = parseInt(labelFontSize.value) || 11;
 
             // Clear previous cards
             cardsContainer.innerHTML = '';
@@ -887,7 +905,10 @@
                     includeImageLabels,
                     titleFont,
                     footerFont,
-                    labelFont
+                    labelFont,
+                    titleSize,
+                    footerSize,
+                    labelSize
                 );
                 cardsContainer.innerHTML += cardHTML;
             }
