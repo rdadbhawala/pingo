@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pingo - Image Bingo Generator</title>
+    <title>Pingo - Picture Bingo Generator</title>
     <style>
         * {
             margin: 0;
@@ -71,7 +71,8 @@
             }
 
             .input-group input[type="number"],
-            .input-group input[type="text"] {
+            .input-group input[type="text"],
+            .input-group select {
                 width: 100%;
                 padding: 10px;
                 border: 2px solid #e0e0e0;
@@ -81,7 +82,8 @@
             }
 
                 .input-group input[type="number"]:focus,
-                .input-group input[type="text"]:focus {
+                .input-group input[type="text"]:focus,
+                .input-group select:focus {
                     outline: none;
                     border-color: #667eea;
                 }
@@ -476,6 +478,49 @@
                 </div>
             </div>
 
+            <!-- Font selection controls (offline-safe using system/web-safe fonts) -->
+            <div class="input-group">
+                <label for="titleFontSelect">Title Font</label>
+                <select id="titleFontSelect">
+                    <option value="'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">System Default (Segoe UI)</option>
+                    <option value="Arial, Helvetica, sans-serif">Arial</option>
+                    <option value="'Trebuchet MS', Helvetica, sans-serif">Trebuchet MS</option>
+                    <option value="'Times New Roman', Times, serif">'Times New Roman'</option>
+                    <option value="Georgia, serif">Georgia</option>
+                    <option value="'Courier New', Courier, monospace">'Courier New'</option>
+                    <option value="Impact, Charcoal, sans-serif">Impact</option>
+                    <option value="'Comic Sans MS', 'Comic Sans', cursive">'Comic Sans MS'</option>
+                    <option value="Verdana, Geneva, Tahoma, sans-serif">Verdana</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="footerFontSelect">Footer Font</label>
+                <select id="footerFontSelect">
+                    <option value="inherit">Inherit (default)</option>
+                    <option value="'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">Segoe UI</option>
+                    <option value="Arial, Helvetica, sans-serif">Arial</option>
+                    <option value="'Times New Roman', Times, serif">'Times New Roman'</option>
+                    <option value="Georgia, serif">Georgia</option>
+                    <option value="'Courier New', Courier, monospace">'Courier New'</option>
+                    <option value="Verdana, Geneva, Tahoma, sans-serif">Verdana</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="labelFontSelect">Image Label Font</label>
+                <select id="labelFontSelect">
+                    <option value="inherit">Inherit (default)</option>
+                    <option value="'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">Segoe UI</option>
+                    <option value="Arial, Helvetica, sans-serif">Arial</option>
+                    <option value="'Trebuchet MS', Helvetica, sans-serif">Trebuchet MS</option>
+                    <option value="'Times New Roman', Times, serif">'Times New Roman'</option>
+                    <option value="Georgia, serif">Georgia</option>
+                    <option value="'Courier New', Courier, monospace">'Courier New'</option>
+                    <option value="'Comic Sans MS', 'Comic Sans', cursive">'Comic Sans MS'</option>
+                </select>
+            </div>
+
             <div class="input-group">
                 <label for="useFilenameLabels" style="display: flex; align-items: center; margin-bottom: 8px;">
                     <input type="checkbox" id="useFilenameLabels" checked style="width: auto; margin-right: 8px; cursor: pointer;">
@@ -492,7 +537,7 @@
                 <h3>📋 How to Use</h3>
                 <ol>
                     <li><strong>Upload Images:</strong> Click the upload area and select images from your computer. You can upload any number of images. The file name becomes the image title in the Bingo cards if "Use filename as Image Labels" is checked.</li>
-                    <li><strong>Configure Settings:</strong> Set the number of cards, grid size (rows/columns), title, and optional footer text.</li>
+                    <li><strong>Configure Settings:</strong> Set the number of cards, grid size (rows/columns), title, optional footer text and the fonts for Title, Footer and Image Labels.</li>
                     <li><strong>Generate Cards:</strong> Click the "Generate" button to create your Bingo cards. They will appear on the right.</li>
                     <li><strong>Print:</strong> Click the "Print" button to open the print dialog. Each card will print on a separate A4 page.</li>
                 </ol>
@@ -542,6 +587,11 @@
         const cardFooter = document.getElementById('cardFooter');
         const displayPageNumbers = document.getElementById('displayPageNumbers');
         const useFilenameLabels = document.getElementById('useFilenameLabels');
+
+        // New DOM elements for font selection
+        const titleFontSelect = document.getElementById('titleFontSelect');
+        const footerFontSelect = document.getElementById('footerFontSelect');
+        const labelFontSelect = document.getElementById('labelFontSelect');
 
         // Upload area click handler
         uploadArea.addEventListener('click', () => {
@@ -727,24 +777,28 @@
          * @param {number} totalPages - Total number of cards
          * @param {boolean} includePageNumbers - Whether to include page numbers in footer
          * @param {boolean} includeImageLabels - Whether to show per-image filename labels
+         * @param {string} titleFont - CSS font-family value for title
+         * @param {string} footerFont - CSS font-family value for footer
+         * @param {string} labelFont - CSS font-family value for image labels
          * @returns {string} - HTML string for the card
          */
-        function createBingoCardHTML(cardData, rows, cols, title, footer, pageNumber, totalPages, includePageNumbers, includeImageLabels) {
+        function createBingoCardHTML(cardData, rows, cols, title, footer, pageNumber, totalPages, includePageNumbers, includeImageLabels, titleFont, footerFont, labelFont) {
             const gridStyle = `grid-template-columns: repeat(${cols}, 1fr); grid-template-rows: repeat(${rows}, 1fr);`;
 
             let cellsHTML = '';
             cardData.forEach((cell) => {
                 // Set img alt to filename only when labels are used for accessibility
                 const imgAlt = includeImageLabels ? cell.filename : '';
-                const labelHTML = includeImageLabels ? `<div class="bingo-cell-filename">${cell.filename}</div>` : '';
+                const labelStyle = labelFont && labelFont !== 'inherit' ? `style="font-family: ${labelFont};"` : '';
+                const labelHTML = includeImageLabels ? `<div class="bingo-cell-filename" ${labelStyle}>${cell.filename}</div>` : '';
                 cellsHTML += `
-                                <div class="bingo-cell">
-                                    <div class="bingo-cell-image">
-                                        <img src="${cell.image}" alt="${imgAlt}">
+                                    <div class="bingo-cell">
+                                        <div class="bingo-cell-image">
+                                            <img src="${cell.image}" alt="${imgAlt}">
+                                        </div>
+                                        ${labelHTML}
                                     </div>
-                                    ${labelHTML}
-                                </div>
-                            `;
+                                `;
             });
 
             // Build footer with optional page number
@@ -759,15 +813,18 @@
                 footerHTML = footer;
             }
 
+            const headerStyle = titleFont && titleFont !== 'inherit' ? `style="font-family: ${titleFont};"` : '';
+            const footerStyle = footerFont && footerFont !== 'inherit' ? `style="font-family: ${footerFont};"` : '';
+
             return `
-                            <div class="bingo-card">
-                                <div class="bingo-card-header">${title || 'BINGO'}</div>
-                                <div class="bingo-grid" style="${gridStyle}">
-                                    ${cellsHTML}
+                                <div class="bingo-card">
+                                    <div class="bingo-card-header" ${headerStyle}>${title || 'BINGO'}</div>
+                                    <div class="bingo-grid" style="${gridStyle}">
+                                        ${cellsHTML}
+                                    </div>
+                                    <div class="bingo-card-footer" ${footerStyle}>${footerHTML}</div>
                                 </div>
-                                <div class="bingo-card-footer">${footerHTML}</div>
-                            </div>
-                        `;
+                            `;
         }
 
         /**
@@ -800,6 +857,11 @@
             const includePageNumbers = displayPageNumbers.checked;
             const includeImageLabels = useFilenameLabels.checked;
 
+            // Read selected fonts (values are CSS-ready font-family fallbacks)
+            const titleFont = titleFontSelect.value || 'inherit';
+            const footerFont = footerFontSelect.value || 'inherit';
+            const labelFont = labelFontSelect.value || 'inherit';
+
             // Clear previous cards
             cardsContainer.innerHTML = '';
 
@@ -822,7 +884,10 @@
                     i + 1,
                     numCards,
                     includePageNumbers,
-                    includeImageLabels
+                    includeImageLabels,
+                    titleFont,
+                    footerFont,
+                    labelFont
                 );
                 cardsContainer.innerHTML += cardHTML;
             }
